@@ -7,6 +7,7 @@ import { PublisherModule } from './publisher/publisher.module';
 import { AuthorModule } from './author/author.module';
 import { GenreModule } from './genre/genre.module';
 import { RecipeModule } from './recipe/recipe.module';
+import { ProjectModule } from './project/project.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { RecipeModule } from './recipe/recipe.module';
     AuthorModule,
     GenreModule,
     RecipeModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],

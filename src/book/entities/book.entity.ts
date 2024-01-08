@@ -2,12 +2,12 @@ import { Author } from 'src/author/entities/author.entity';
 import { Publisher } from 'src/publisher/entities/publisher.entity';
 import { Genre } from 'src/genre/entities/genre.entity';
 import {
-  Column,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  Column,
 } from 'typeorm';
 
 @Entity()
@@ -18,6 +18,7 @@ export class Book {
   @Column({
     length: 50,
     name: 'short_title',
+    nullable: true
   })
   shortTitle: string;
 
@@ -33,21 +34,26 @@ export class Book {
 
   @Column({
     length: 400,
+    nullable: true
   })
   quote: string;
 
   @Column({
     length: 50,
     name: 'sub_title',
+    nullable: true
   })
   subTitle: string;
 
-  @Column()
+  @Column({
+    default: 0
+  })
   band: number;
 
   @Column({
     length: 80,
     name: 'book_series_title',
+    nullable: true
   })
   bookSeriesTitle: string;
 
@@ -61,12 +67,31 @@ export class Book {
   @JoinTable()
   genres: Genre[];
 
- @Column() 
- isReadingFinished: boolean;
+  @Column({
+    default: false,
+    name: 'is_reading_finished',
 
- @Column() 
- isCurrentRead: boolean;
+  }) 
+  isReadingFinished: boolean;
 
- @Column() 
- isOwned: boolean;
+  @Column({
+    default: false,
+    name: 'is_current_read',
+  }) 
+  isCurrentRead: boolean;
+
+  @Column({
+    default: false,
+    name: 'is_owned'
+  }) 
+  isOwned: boolean;
+
+  @Column({
+    nullable: true,
+    length: 50,
+    name: 'image_path',
+  })
+  imagePath: string;
 }
+
+
