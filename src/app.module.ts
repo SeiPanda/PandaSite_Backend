@@ -8,6 +8,14 @@ import { AuthorModule } from './author/author.module';
 import { GenreModule } from './genre/genre.module';
 import { RecipeModule } from './recipe/recipe.module';
 import { ProjectModule } from './project/project.module';
+import { TimeUnitModule } from './time-unit/time-unit.module';
+import { DifficultyModule } from './difficulty/difficulty.module';
+import { CategoryModule } from './category/category.module';
+import { UtilModule } from './util/util.module';
+import { IngredientModule } from './ingredient/ingredient.module';
+import { AmountUnitModule } from './amount-unit/amount-unit.module';
+import { InstructionModule } from './instruction/instruction.module';
+import { InstructionIngredientModule } from './instruction_ingredient/instruction_ingredient.module';
 
 @Module({
   imports: [
@@ -29,6 +37,14 @@ import { ProjectModule } from './project/project.module';
     GenreModule,
     RecipeModule,
     ProjectModule,
+    TimeUnitModule,
+    DifficultyModule,
+    CategoryModule,
+    UtilModule,
+    IngredientModule,
+    AmountUnitModule,
+    InstructionModule,
+    InstructionIngredientModule,
   ],
   controllers: [AppController],
   providers: [AppService],
