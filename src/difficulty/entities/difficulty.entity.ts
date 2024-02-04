@@ -3,12 +3,12 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Difficulty {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ length: 15 })
-    name: string;
+  @Column({ length: 15 })
+  name: string;
 
-    @OneToMany(() => Recipe, (recipe) => recipe.difficulty)
-    recipes: Recipe[];
+  @OneToMany(() => Recipe, (recipe) => recipe.difficulty)
+  recipes: Recipe[];
 }
