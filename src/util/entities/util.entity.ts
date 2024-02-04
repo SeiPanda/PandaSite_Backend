@@ -10,13 +10,17 @@ export class Util {
     name: string;
 
     @ManyToMany(() => Instruction, (instruction) => instruction.utils)
-    @JoinTable({ name: 'Instruction_Util', joinColumn: {
-        name: 'util_id',
-        referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-        name: 'instruction_id',
-        referencedColumnName: 'id'
-    }})
+    @JoinTable({ 
+        name: 'Instruction_Util', 
+        synchronize: false, 
+        joinColumn: {
+            name: 'util_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'instruction_id',
+            referencedColumnName: 'id'
+        }
+    })
     instructions: Instruction[];
 }

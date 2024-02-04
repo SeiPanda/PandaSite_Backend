@@ -10,13 +10,17 @@ export class Category {
     name: string;
 
     @OneToMany(() => Recipe, (recipe) => recipe.categories)
-    @JoinTable({ name: 'Recipe_Category', joinColumn: {
-        name: 'category_id',
-        referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-        name: 'recipe_id',
-        referencedColumnName: 'id'
-    }})
+    @JoinTable({ 
+        name: 'Recipe_Category', 
+        synchronize: false,
+        joinColumn: {
+            name: 'category_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'recipe_id',
+            referencedColumnName: 'id'
+        }
+    })
     recipes: Recipe[];
 }

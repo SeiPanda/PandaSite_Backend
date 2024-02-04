@@ -63,14 +63,18 @@ export class Recipe {
     difficulty: Difficulty;
 
     @ManyToMany(() => Category, (category) => category.recipes)
-    @JoinTable({ name: 'Recipe_Category', joinColumn: {
-        name: 'recipe_id',
-        referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-        name: 'category_id',
-        referencedColumnName: 'id'
-    }})
+    @JoinTable({ 
+        name: 'Recipe_Category', 
+        synchronize: false,
+        joinColumn: {
+            name: 'recipe_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'category_id',
+            referencedColumnName: 'id'
+        }
+    })
     categories: Category[];
 
     @OneToMany(() => Instruction, (instruction) => instruction.recipe)

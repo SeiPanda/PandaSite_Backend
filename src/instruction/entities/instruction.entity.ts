@@ -18,14 +18,18 @@ export class Instruction {
     title: string;
 
     @ManyToMany(() => Util, (util) => util.instructions)
-    @JoinTable({ name: 'Instruction_Util', joinColumn: {
-        name: 'instruction_id',
-        referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-        name: 'util_id',
-        referencedColumnName: 'id'
-    }})
+    @JoinTable({ 
+        name: 'Instruction_Util', 
+        synchronize: false, 
+        joinColumn: {
+            name: 'instruction_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'util_id',
+            referencedColumnName: 'id'
+        }
+    })
     utils: Util[];
 
     @OneToMany(() => InstructionIngredient, (instructionIngredient) => instructionIngredient.instruction)
