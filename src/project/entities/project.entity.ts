@@ -1,8 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Project {
@@ -16,7 +12,7 @@ export class Project {
 
   @Column({
     type: 'text',
-    name: 'long_description'
+    name: 'long_description',
   })
   longDescription: string;
 
@@ -24,7 +20,6 @@ export class Project {
     length: 255,
     nullable: true,
     name: 'short_description',
-
   })
   shortDescription: string;
 
@@ -32,7 +27,6 @@ export class Project {
     length: 255,
     nullable: true,
     name: 'github_link',
-
   })
   githubLink: string;
 
@@ -40,7 +34,6 @@ export class Project {
     length: 255,
     nullable: true,
     name: 'project_live_url',
-
   })
   projectLiveUrl: string;
 
@@ -51,5 +44,3 @@ export class Project {
   })
   imagePath: string;
 }
-
-

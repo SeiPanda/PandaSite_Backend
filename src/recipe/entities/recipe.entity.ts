@@ -3,80 +3,80 @@ import { Difficulty } from 'src/difficulty/entities/difficulty.entity';
 import { Instruction } from 'src/instruction/entities/instruction.entity';
 import { TimeUnit } from 'src/time-unit/entities/timeUnit.entity';
 import {
-    Entity,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    ManyToMany,
-    JoinTable,
-    Column,
-    JoinColumn,
-    OneToMany,
-  } from 'typeorm';
-  
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  ManyToMany,
+  JoinTable,
+  Column,
+  JoinColumn,
+  OneToMany,
+} from 'typeorm';
+
 @Entity()
 export class Recipe {
-    @PrimaryGeneratedColumn()
-    id: number;
-  
-    @Column()
-    title: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ width: 5 })
-    score: number;
+  @Column()
+  title: string;
 
-    @Column()
-    time: number;
+  @Column({ width: 5 })
+  score: number;
 
-    @ManyToOne(() => TimeUnit, (timeUnit) => timeUnit.recipes)
-    @JoinColumn({ name: 'time_unit' })
-    timeUnit: TimeUnit;
+  @Column()
+  time: number;
 
-    @Column({ name: 'image_path' })
-    imagePath: string;
+  @ManyToOne(() => TimeUnit, (timeUnit) => timeUnit.recipes)
+  @JoinColumn({ name: 'time_unit' })
+  timeUnit: TimeUnit;
 
-    @Column()
-    calories: number;
+  @Column({ name: 'image_path' })
+  imagePath: string;
 
-    @Column()
-    carbs: number;
+  @Column()
+  calories: number;
 
-    @Column()
-    fiber: number;
+  @Column()
+  carbs: number;
 
-    @Column()
-    protein: number;
+  @Column()
+  fiber: number;
 
-    @Column()
-    fat: number;
+  @Column()
+  protein: number;
 
-    @Column()
-    sugar: number;
+  @Column()
+  fat: number;
 
-    @Column({
-        width: 15,
-        name: 'portion_size'
-    })
-    portionSize: number;
+  @Column()
+  sugar: number;
 
-    @ManyToOne(() => Difficulty, (difficulty) => difficulty.recipes)
-    @JoinColumn({ name: 'difficulty_id',  })
-    difficulty: Difficulty;
+  @Column({
+    width: 15,
+    name: 'portion_size',
+  })
+  portionSize: number;
 
-    @ManyToMany(() => Category, (category) => category.recipes)
-    @JoinTable({ 
-        name: 'Recipe_Category', 
-        synchronize: false,
-        joinColumn: {
-            name: 'recipe_id',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'category_id',
-            referencedColumnName: 'id'
-        }
-    })
-    categories: Category[];
+  @ManyToOne(() => Difficulty, (difficulty) => difficulty.recipes)
+  @JoinColumn({ name: 'difficulty_id' })
+  difficulty: Difficulty;
 
-    @OneToMany(() => Instruction, (instruction) => instruction.recipe)
-    instructions: Instruction[];
+  @ManyToMany(() => Category, (category) => category.recipes)
+  @JoinTable({
+    name: 'Recipe_Category',
+    synchronize: false,
+    joinColumn: {
+      name: 'recipe_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'category_id',
+      referencedColumnName: 'id',
+    },
+  })
+  categories: Category[];
+
+  @OneToMany(() => Instruction, (instruction) => instruction.recipe)
+  instructions: Instruction[];
 }

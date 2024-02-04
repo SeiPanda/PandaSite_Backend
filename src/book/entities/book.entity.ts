@@ -18,7 +18,7 @@ export class Book {
   @Column({
     length: 50,
     name: 'short_title',
-    nullable: true
+    nullable: true,
   })
   shortTitle: string;
 
@@ -34,26 +34,26 @@ export class Book {
 
   @Column({
     length: 400,
-    nullable: true
+    nullable: true,
   })
   quote: string;
 
   @Column({
     length: 50,
     name: 'sub_title',
-    nullable: true
+    nullable: true,
   })
   subTitle: string;
 
   @Column({
-    default: 0
+    default: 0,
   })
   band: number;
 
   @Column({
     length: 80,
     name: 'book_series_title',
-    nullable: true
+    nullable: true,
   })
   bookSeriesTitle: string;
 
@@ -70,20 +70,19 @@ export class Book {
   @Column({
     default: false,
     name: 'is_reading_finished',
-
-  }) 
+  })
   isReadingFinished: boolean;
 
   @Column({
     default: false,
     name: 'is_current_read',
-  }) 
+  })
   isCurrentRead: boolean;
 
   @Column({
     default: false,
-    name: 'is_owned'
-  }) 
+    name: 'is_owned',
+  })
   isOwned: boolean;
 
   @Column({
@@ -93,5 +92,3 @@ export class Book {
   })
   imagePath: string;
 }
-
-
