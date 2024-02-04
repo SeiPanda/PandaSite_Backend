@@ -1,6 +1,7 @@
 import { Category } from 'src/category/entities/category.entity';
 import { Difficulty } from 'src/difficulty/entities/difficulty.entity';
 import { Instruction } from 'src/instruction/entities/instruction.entity';
+import { RecipeIngredient } from 'src/recipe_ingredient/entities/recipeIngredient.entity';
 import { TimeUnit } from 'src/time-unit/entities/timeUnit.entity';
 import {
   Entity,
@@ -65,7 +66,6 @@ export class Recipe {
   @ManyToMany(() => Category, (category) => category.recipes)
   @JoinTable({
     name: 'Recipe_Category',
-    synchronize: false,
     joinColumn: {
       name: 'recipe_id',
       referencedColumnName: 'id',
@@ -79,4 +79,7 @@ export class Recipe {
 
   @OneToMany(() => Instruction, (instruction) => instruction.recipe)
   instructions: Instruction[];
+
+  @OneToMany(() => RecipeIngredient, (ingredient) => ingredient.recipe)
+  ingredients: RecipeIngredient[];
 }
