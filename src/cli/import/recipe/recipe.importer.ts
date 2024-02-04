@@ -30,9 +30,11 @@ export class RecipeImporter extends Importer {
 
     const title = await this.getTitle(filePath, fileName);
     const calories = await this.getCalories(filePath, fileName);
+    const ingredientLines = await this.getIngredients(filePath, fileName);
 
     console.log(`Title: ${title}`);
     console.log(`Calories: ${calories} kcal`);
+    console.log(ingredientLines);
   }
 
   async getFileContent(filePath: string, fileName: string) {
@@ -90,5 +92,56 @@ export class RecipeImporter extends Importer {
       }
     }
     return Promise.reject();
+  }
+
+  private async getIngredientLines(
+    filePath: string,
+    fileName: string,
+  ): Promise<string[]> {
+    if (!filePath || !fileName) {
+      console.log('No filepath or filename provided!');
+      return;
+    }
+
+    const fileContent = await this.getFileContent(filePath, fileName);
+
+    const ingredientsRange: { begin: number; end: number } = {
+      begin: 0,
+      end: 0,
+    };
+
+    for (const [index, lineContent] of fileContent.split(/\r?\n/).entries()) {
+      if (lineContent.startsWith('Zutaten für')) {
+        ingredientsRange.begin = index + 1;
+      }
+      if (
+        this.isLineEmpty(lineContent) &&
+        index >= ingredientsRange.begin &&
+        ingredientsRange.begin !== 0
+      ) {
+        ingredientsRange.end = index - 1;
+        break;
+      }
+    }
+
+    return fileContent
+      .split(/\r?\n/)
+      .slice(ingredientsRange.begin, ingredientsRange.end + 1)
+      .map((lineContent) => lineContent.substring(1)); // Remove '-' on front of line
+  }
+
+  private async getIngredients(filePath: string, fileName: string) {
+    if (!filePath || !fileName) {
+      console.log('No filepath or filename provided!');
+      return;
+    }
+
+    const ingredientsToReturn = [];
+
+    const ingredientLines = await this.getIngredientLines(filePath, fileName);
+    for (const ingredientLine of ingredientLines) {
+      ingredientsToReturn.push(ingredientLine.split('(')[0].trim());
+    }
+    return [...new Set(ingredientsToReturn)].filter(Boolean); // Filter duplicates
   }
 }
