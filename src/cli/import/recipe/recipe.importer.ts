@@ -1,8 +1,10 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { Importer } from '../../abstracts/Importer.abstract';
-import { IngredientAmount } from 'src/cli/interfaces/ingredientAmount.interface';
 import { TextBlockRange } from 'src/cli/interfaces/TextBlockRange.interface';
-import { Instruction } from 'src/instruction/entities/instruction.entity';
+import { CreateInstructionDTO } from 'src/instruction/entities/create-instruction.dto';
+import { CreateUtilDTO } from 'src/util/entities/create-util.dto';
+import { CreateIngredientDTO } from 'src/ingredient/entities/create-ingredient.dto';
+import { CreateRecipeDTO } from 'src/recipe/entities/create-recipe.dto';
 
 export class RecipeImporter extends Importer {
   constructor(pathToImport: string) {
@@ -39,11 +41,14 @@ export class RecipeImporter extends Importer {
     const recipeIngredients = this.getRecipeIngredients(fileContent);
     const instructions = this.getInstructions(fileContent);
 
-    console.log(`Title: ${title}`);
-    console.log(`Calories: ${calories} kcal`);
-    console.log(`Portion Size: ${portionSize}`);
-    console.log('Recipe Ingredients: ', recipeIngredients);
-    console.log('Instructions: ', instructions);
+    const recipe: CreateRecipeDTO = {
+      title,
+      calories,
+      portionSize,
+      ingredients: recipeIngredients,
+      instructions,
+    };
+    console.log(JSON.stringify(recipe));
   }
 
   /**
@@ -98,7 +103,7 @@ export class RecipeImporter extends Importer {
     return undefined;
   }
 
-  private getRecipeIngredients(fileContent: string): IngredientAmount[] {
+  private getRecipeIngredients(fileContent: string): CreateIngredientDTO[] {
     const allLines = this.getTextBlockBeginningWith(
       'Zutaten für',
       fileContent,
@@ -120,7 +125,9 @@ export class RecipeImporter extends Importer {
    * is separated by a comma.
    * @returns an array of `IngredientAmount` objects.
    */
-  private convertIngredientLine(ingredientLineRaw: string): IngredientAmount[] {
+  private convertIngredientLine(
+    ingredientLineRaw: string,
+  ): CreateIngredientDTO[] {
     const ingredientsToReturn = [];
     const ingredientComponent = ingredientLineRaw.split(',');
     for (const ingredientText of ingredientComponent) {
@@ -138,7 +145,7 @@ export class RecipeImporter extends Importer {
    * and unit in parentheses.
    * @returns {IngredientAmount} an object of type IngredientAmount.
    */
-  private convertSingleIngredient(ingredientRaw: string): IngredientAmount {
+  private convertSingleIngredient(ingredientRaw: string): CreateIngredientDTO {
     const ingredientName = ingredientRaw.split('(')[0].trim();
     const ingredientAmountFull = ingredientRaw
       .split('(')[1]
@@ -152,7 +159,7 @@ export class RecipeImporter extends Importer {
       .trim();
 
     return {
-      ingredientName,
+      name: ingredientName,
       amount,
       amountUnit,
     };
@@ -176,7 +183,9 @@ export class RecipeImporter extends Importer {
       end: 0,
     };
     for (const [index, lineContent] of fileContent.split(/\r?\n/).entries()) {
-      if (lineContent.startsWith(blockStartString)) {
+      if (
+        lineContent.toLowerCase().startsWith(blockStartString.toLowerCase())
+      ) {
         instructionsRange.begin = index + 1;
       }
       if (
@@ -193,20 +202,16 @@ export class RecipeImporter extends Importer {
       .slice(instructionsRange.begin, instructionsRange.end + 1);
   }
 
-  private getInstructions(fileContent: string): Instruction[] {
+  private getInstructions(fileContent: string): CreateInstructionDTO[] {
     const allInstructionLines = this.getTextBlockBeginningWith(
       'Anleitung für',
       fileContent,
     );
 
-    const instructions: Instruction[] = [];
+    const instructions: CreateInstructionDTO[] = [];
     for (const instructionLine of allInstructionLines) {
-      const instructionId = parseInt(instructionLine.split('.')[0]);
-      const instructionContentRaw = instructionLine.split('.')[1];
-      const instructionContent =
-        instructionContentRaw.substring(1, instructionContentRaw.length) === ' '
-          ? instructionContentRaw.substring(1, instructionContentRaw.length)
-          : instructionContentRaw;
+      const stepId = parseInt(instructionLine.split('.')[0]);
+      const instructionContent = instructionLine.split('.')[1].trim();
 
       /**
        * TODO:
@@ -214,17 +219,88 @@ export class RecipeImporter extends Importer {
        * - load instruction_ingredients getInstructionIngredients()
        *  */
 
-      const instruction = {
-        id: null,
-        step: instructionId,
+      const stepUtils: CreateUtilDTO[] = this.getInstructionUtils(
+        stepId,
+        fileContent,
+      );
+
+      const instructionIngredients = this.getInstructionIngredients(
+        stepId,
+        fileContent,
+      );
+
+      const instruction: CreateInstructionDTO = {
+        step: stepId,
         content: instructionContent,
-        title: '',
-        utils: [], // TODO
-        ingredients: [], // TODO
-        recipe: null,
+        utils: stepUtils,
+        ingredients: instructionIngredients,
       };
       instructions.push(instruction);
     }
     return instructions;
+  }
+
+  private getInstructionUtils(
+    instructionId: number,
+    fileContent: string,
+  ): CreateUtilDTO[] {
+    const utilsToReturn: CreateUtilDTO[] = [];
+
+    const utilLines = this.getTextBlockBeginningWith('Util:', fileContent);
+    for (const utilLine of utilLines) {
+      const utilLineParts = utilLine.split('.');
+      if (parseInt(utilLineParts[0]) !== instructionId) {
+        continue;
+      }
+
+      const utilToAdd = {
+        name: utilLineParts[1].trim(),
+      };
+
+      utilsToReturn.push(utilToAdd);
+    }
+    return utilsToReturn;
+  }
+
+  private getInstructionIngredients(
+    instructionId: number,
+    fileContent: string,
+  ): CreateIngredientDTO[] {
+    const ingredientsToReturn: CreateIngredientDTO[] = [];
+
+    const instructionIngredientLines = this.getTextBlockBeginningWith(
+      'Schritte Zutaten:',
+      fileContent,
+    );
+
+    for (const instructionIngredientsLine of instructionIngredientLines) {
+      const instructionIngredientsLineParts =
+        instructionIngredientsLine.split('.');
+      if (parseInt(instructionIngredientsLineParts[0]) !== instructionId) {
+        continue;
+      }
+
+      const differentInstructionIngredients = this.convertIngredientLine(
+        instructionIngredientsLineParts[1],
+      );
+
+      for (const instructionIngredient of differentInstructionIngredients) {
+        ingredientsToReturn.push(instructionIngredient);
+      }
+
+      //console.log(differentInstructionIngredients);
+
+      // const instructionIngredientContent: string =
+      //   instructionIngredientsLineParts[1].trim();
+
+      // const instructionIngredientToAdd = {
+      //   id: null,
+      //   name: instructionIngredientContent,
+      //   instructions: [],
+      // };
+
+      // ingredientsToReturn.push(instructionIngredientToAdd);
+    }
+    return ingredientsToReturn;
   }
 }
