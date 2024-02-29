@@ -1,14 +1,13 @@
 import { CreateCategoryDTO } from 'src/category/entities/create-category.dto';
 import { CreateDifficultyDTO } from 'src/difficulty/entities/create-difficulty.dto';
+import { CreateTimeDTO } from 'src/general/dto/create-time.dto';
 import { CreateIngredientDTO } from 'src/ingredient/entities/create-ingredient.dto';
 import { CreateInstructionDTO } from 'src/instruction/entities/create-instruction.dto';
-import { CreateTimeUnitDTO } from 'src/time-unit/entities/create-timeUnit.dto';
 
 export class CreateRecipeDTO {
   title: string;
   score?: number;
-  time?: number;
-  timeUnit?: CreateTimeUnitDTO;
+  time?: CreateTimeDTO;
   imagePath?: string;
   calories?: number;
   portionSize?: number;

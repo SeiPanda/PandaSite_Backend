@@ -48,7 +48,6 @@ export class RecipeImporter extends Importer {
       ingredients: recipeIngredients,
       instructions,
     };
-    console.log(JSON.stringify(recipe));
   }
 
   /**
