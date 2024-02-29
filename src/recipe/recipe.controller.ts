@@ -12,7 +12,7 @@ export class RecipeController {
 
   @Get()
   findAll() {
-    return this.recipeService.findAll();
+    return this.recipeService.getRecipes();
   }
 
   @Get(':id')
