@@ -6,10 +6,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 @Entity()
 export class InstructionIngredient {
   @PrimaryColumn({ name: 'instruction_id', type: 'int' })
-  @ManyToOne(
-    () => Instruction,
-    (instruction) => instruction.instructionIngredients,
-  )
+  @ManyToOne(() => Instruction, (instruction) => instruction.ingredients)
   @JoinColumn({ name: 'instruction_id' })
   instruction: Instruction;
 

@@ -18,7 +18,6 @@ export class Category {
   @OneToMany(() => Recipe, (recipe) => recipe.categories)
   @JoinTable({
     name: 'Recipe_Category',
-    synchronize: false,
     joinColumn: {
       name: 'category_id',
       referencedColumnName: 'id',

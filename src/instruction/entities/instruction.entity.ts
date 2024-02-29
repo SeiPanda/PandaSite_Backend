@@ -29,7 +29,6 @@ export class Instruction {
   @ManyToMany(() => Util, (util) => util.instructions)
   @JoinTable({
     name: 'Instruction_Util',
-    synchronize: false,
     joinColumn: {
       name: 'instruction_id',
       referencedColumnName: 'id',
@@ -46,7 +45,7 @@ export class Instruction {
     (instructionIngredient) => instructionIngredient.instruction,
   )
   @JoinTable({ name: 'Instruction_Ingredient' })
-  instructionIngredients: InstructionIngredient[];
+  ingredients: InstructionIngredient[];
 
   @ManyToOne(() => Recipe, (recipe) => recipe.instructions)
   @JoinColumn({ name: 'recipe_id' })
