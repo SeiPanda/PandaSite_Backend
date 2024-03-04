@@ -31,21 +31,7 @@ export class RecipeService {
     });
   }
 
-  // async findAllShort(): Promise<GetRecipeShortDTO[]> {
-  //   let recipesFull = await this.findAllFull();
-  //   const recipesToReturn: GetRecipeShortDTO[] = [];
-
-  //   for (const recipeFull of recipesFull) {
-  //     recipesToReturn.push(recipeFull as GetRecipeShortDTO);
-  //   }
-  //   return recipesFull;
-  // }
-
-  findOne(id: number): Promise<Recipe> {
-    return this.recipeRepository.findOneBy({ id });
+  findOne(id: number) {
+    return `This action returns a #${id} recipe`;
   }
-
-  /* create(recipe: CreateRecipeDTO) {
-    
-  } */
 }
