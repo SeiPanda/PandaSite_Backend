@@ -32,7 +32,10 @@ export class Recipe {
   @JoinColumn({ name: 'time_unit' })
   timeUnit: TimeUnit;
 
-  @Column({ name: 'image_path' })
+  @Column({
+    name: 'image_path',
+    nullable: true,
+  })
   imagePath: string;
 
   @Column()

@@ -10,20 +10,25 @@ export class RecipeService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  findAll() {
+  async findAllFull(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
         instructions: {
-          ingredients: true,
+          ingredients: {
+            ingredient: true,
+            amountUnit: true,
+          },
+          utils: true,
         },
         categories: true,
         timeUnit: true,
         difficulty: true,
+        ingredients: true,
       },
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recipe`;
+  findOne(id: number): Promise<Recipe> {
+    return this.recipeRepository.findOneBy({ id });
   }
 }
