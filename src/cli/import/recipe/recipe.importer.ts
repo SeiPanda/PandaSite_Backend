@@ -5,6 +5,11 @@ import { CreateInstructionDTO } from 'src/instruction/entities/create-instructio
 import { CreateUtilDTO } from 'src/util/entities/create-util.dto';
 import { CreateIngredientDTO } from 'src/ingredient/entities/create-ingredient.dto';
 import { CreateRecipeDTO } from 'src/recipe/entities/create-recipe.dto';
+import { Nutrition } from 'src/cli/interfaces/Nutritions.interface';
+import { CreateTimeDTO } from 'src/general/dto/create-time.dto';
+import { CreateDifficultyDTO } from 'src/difficulty/entities/create-difficulty.dto';
+import { CreateCategoryDTO } from 'src/category/entities/create-category.dto';
+import { RecipeService } from 'src/recipe/recipe.service';
 
 export class RecipeImporter extends Importer {
   constructor(pathToImport: string) {
@@ -36,18 +41,33 @@ export class RecipeImporter extends Importer {
     const fileContent = await this.getFileContent(filePath, fileName);
 
     const title = this.getTitle(fileContent);
-    const calories = this.getCalories(fileContent);
     const portionSize = this.getPortionsSize(fileContent);
     const recipeIngredients = this.getRecipeIngredients(fileContent);
     const instructions = this.getInstructions(fileContent);
+    const nutritions = this.getNutritions(fileContent);
+    const duration = this.getDuration(fileContent);
+    const difficulty = this.getDifficulty(fileContent);
+    const categories = this.getCategories(fileContent);
+    const score = this.getScore(fileContent);
 
     const recipe: CreateRecipeDTO = {
       title,
-      calories,
+      calories: nutritions.calories,
       portionSize,
       ingredients: recipeIngredients,
       instructions,
+      carbs: nutritions.carbs,
+      fiber: nutritions.fiber,
+      fat: nutritions.fat,
+      sugar: nutritions.sugar,
+      protein: nutritions.protein,
+      time: duration,
+      difficulty: difficulty,
+      categories: categories,
+      score: score,
     };
+
+    this.saveRecipeToDatabase(recipe);
   }
 
   /**
@@ -63,7 +83,10 @@ export class RecipeImporter extends Importer {
       return;
     }
 
-    const content = await readFile(`${filePath}${fileName}`, 'utf8');
+    let content = await readFile(`${filePath}${fileName}`, 'utf8');
+    if (!content.endsWith('\n')) {
+      content += '\n';
+    }
     return content;
   }
 
@@ -212,12 +235,6 @@ export class RecipeImporter extends Importer {
       const stepId = parseInt(instructionLine.split('.')[0]);
       const instructionContent = instructionLine.split('.')[1].trim();
 
-      /**
-       * TODO:
-       * - Load utils getInstructionUtils()
-       * - load instruction_ingredients getInstructionIngredients()
-       *  */
-
       const stepUtils: CreateUtilDTO[] = this.getInstructionUtils(
         stepId,
         fileContent,
@@ -286,20 +303,158 @@ export class RecipeImporter extends Importer {
       for (const instructionIngredient of differentInstructionIngredients) {
         ingredientsToReturn.push(instructionIngredient);
       }
-
-      //console.log(differentInstructionIngredients);
-
-      // const instructionIngredientContent: string =
-      //   instructionIngredientsLineParts[1].trim();
-
-      // const instructionIngredientToAdd = {
-      //   id: null,
-      //   name: instructionIngredientContent,
-      //   instructions: [],
-      // };
-
-      // ingredientsToReturn.push(instructionIngredientToAdd);
     }
     return ingredientsToReturn;
+  }
+
+  private getNutritions(fileContent: string): Nutrition {
+    const nutrition: Nutrition = {
+      /* Load calories seperately */
+      calories: this.getCalories(fileContent),
+    };
+
+    const nutritionLines = this.getTextBlockBeginningWith(
+      'Nährwerte:',
+      fileContent,
+    );
+
+    for (const nutritionLine of nutritionLines) {
+      let lineKey = '';
+
+      const nutritionLineParts = nutritionLine.toLowerCase().split(':');
+      switch (nutritionLineParts[0]) {
+        case 'fett':
+          lineKey = 'fat';
+          break;
+        case 'zucker':
+          lineKey = 'sugar';
+          break;
+        case 'kohlenhydrate':
+          lineKey = 'carbs';
+          break;
+        case 'protein':
+          lineKey = 'protein';
+          break;
+        case 'ballaststoffe':
+          lineKey = 'fiber';
+          break;
+      }
+      if (lineKey === '') {
+        throw new Error(`Unknown nutrition '${nutritionLineParts[0]}'`);
+      }
+
+      if (isNaN(parseFloat(nutritionLineParts[1].trim()))) {
+        throw new Error(
+          `Value of nutrition '${nutritionLineParts[0]}' has to be a number!`,
+        );
+      }
+
+      nutrition[lineKey] = +nutritionLineParts[1].trim();
+    }
+    return nutrition;
+  }
+
+  private getDuration(fileContent: string): CreateTimeDTO | undefined {
+    for (const lineContent of fileContent.split(/\r?\n/)) {
+      if (this.isLineEmpty(lineContent)) {
+        continue;
+      }
+
+      if (!lineContent.startsWith('Dauer:')) {
+        continue;
+      }
+
+      const value = lineContent.split(':')[1].trim();
+      const duration = value.split(' ')[0].trim();
+      const timeUnit = value.split(' ')[1].trim();
+
+      if (isNaN(parseFloat(duration))) {
+        throw new Error(`Duration Time '${duration}' has to be a number!`);
+      }
+
+      return {
+        time: +duration,
+        timeUnit: {
+          id: timeUnit,
+          name: timeUnit,
+        },
+      };
+    }
+    return undefined;
+  }
+
+  private getDifficulty(fileContent: string): CreateDifficultyDTO | undefined {
+    for (const lineContent of fileContent.split(/\r?\n/)) {
+      if (this.isLineEmpty(lineContent)) {
+        continue;
+      }
+
+      if (!lineContent.startsWith('Schwierigkeit:')) {
+        continue;
+      }
+
+      const difficulty = lineContent.split(':')[1].trim();
+
+      if (isNaN(parseFloat(difficulty))) {
+        throw new Error(`Difficulty '${difficulty}' has to be a number!`);
+      }
+
+      return {
+        id: +difficulty,
+        name: difficulty,
+      };
+    }
+    return undefined;
+  }
+
+  private getCategories(fileContent: string): CreateCategoryDTO[] {
+    const categoriesToReturn: CreateCategoryDTO[] = [];
+
+    const categoryLines = this.getTextBlockBeginningWith(
+      'Kategorien:',
+      fileContent,
+    );
+
+    for (const categoryLine of categoryLines) {
+      categoriesToReturn.push({
+        id: categoryLine.toLowerCase(),
+        name: categoryLine,
+      });
+    }
+
+    return categoriesToReturn;
+  }
+
+  private getScore(fileContent: string): number | undefined {
+    for (const lineContent of fileContent.split(/\r?\n/)) {
+      if (this.isLineEmpty(lineContent)) {
+        continue;
+      }
+
+      if (!lineContent.startsWith('Bewertung:')) {
+        continue;
+      }
+
+      const score = lineContent.split(':')[1].trim();
+
+      if (isNaN(parseFloat(score))) {
+        throw new Error(`Score '${score}' has to be a number!`);
+      }
+
+      return +score;
+    }
+    return undefined;
+  }
+
+  private async saveRecipeToDatabase(
+    _recipe: CreateRecipeDTO,
+  ): Promise<boolean> {
+    /* try {
+      await this.recipeService.create(recipe);
+      return true;
+    } catch (error) {
+      return false;
+    } */
+    return true;
   }
 }

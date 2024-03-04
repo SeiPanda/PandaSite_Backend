@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
+import { Recipe } from './entities/recipe.entity';
 
 @Controller('recipe')
 export class RecipeController {
@@ -11,8 +12,11 @@ export class RecipeController {
   } */
 
   @Get()
-  findAll() {
-    return this.recipeService.findAll();
+  findAll(/* @Query() queryParams */): Promise<Recipe[]> {
+    // if (queryParams.format === 'short') {
+    //   return this.recipeService.findAllShort();
+    // }
+    return this.recipeService.findAllFull();
   }
 
   @Get(':id')
