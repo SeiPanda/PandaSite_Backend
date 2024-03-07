@@ -20,13 +20,13 @@ export class Ingredient {
     () => InstructionIngredient,
     (instructionIngredient) => instructionIngredient.ingredient,
   )
-  @JoinTable({ name: 'Instruction_Ingredient' })
-  instructionIngredients: InstructionIngredient[];
+  @JoinTable({ name: 'instruction_ingredient' })
+  instructionIngredients?: InstructionIngredient[];
 
   @OneToMany(
     () => RecipeIngredient,
     (recipeIngredient) => recipeIngredient.ingredient,
   )
-  @JoinTable({ name: 'Recipe_Ingredient' })
-  recipeIngredients: RecipeIngredient[];
+  @JoinTable({ name: 'recipe_ingredient' })
+  recipeIngredients?: RecipeIngredient[];
 }

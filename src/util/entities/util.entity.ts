@@ -17,7 +17,7 @@ export class Util {
 
   @ManyToMany(() => Instruction, (instruction) => instruction.utils)
   @JoinTable({
-    name: 'Instruction_Util',
+    name: 'instruction_util',
     joinColumn: {
       name: 'util_id',
       referencedColumnName: 'id',

@@ -23,7 +23,7 @@ export class RecipeService {
         categories: true,
         timeUnit: true,
         difficulty: true,
-        ingredients: true,
+        ingredients: false,
       },
     });
   }

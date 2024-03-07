@@ -68,7 +68,7 @@ export class Recipe {
 
   @ManyToMany(() => Category, (category) => category.recipes)
   @JoinTable({
-    name: 'Recipe_Category',
+    name: 'recipe_category',
     joinColumn: {
       name: 'recipe_id',
       referencedColumnName: 'id',
