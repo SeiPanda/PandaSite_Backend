@@ -10,7 +10,7 @@ export class RecipeService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async findAllFull(): Promise<Recipe[]> {
+  async getRecipes(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
         instructions: {
@@ -28,7 +28,7 @@ export class RecipeService {
     });
   }
 
-  findOne(id: number): Promise<Recipe> {
+  getRecipeById(id: number): Promise<Recipe> {
     return this.recipeRepository.findOneBy({ id });
   }
 }

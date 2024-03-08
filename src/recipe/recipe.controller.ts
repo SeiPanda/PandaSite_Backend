@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { Recipe } from './entities/recipe.entity';
 import { Instruction } from 'src/instruction/entities/instruction.entity';
-import { GetRecipeDTO } from './entities/get-recipe.dto';
+import { RecipeDTO } from './entities/recipe.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -14,11 +14,11 @@ export class RecipeController {
   } */
 
   @Get()
-  async findAll(/* @Query() queryParams */): Promise<GetRecipeDTO[]> {
+  async findAll(/* @Query() queryParams */): Promise<RecipeDTO[]> {
     // if (queryParams.format === 'short') {
     //   return this.recipeService.findAllShort();
     // }
-    const allRecipes = await this.recipeService.findAllFull();
+    const allRecipes = await this.recipeService.getRecipes();
     const recipesToReturn = [];
     for (const recipe of allRecipes) {
       const recipeToReturn = this.mapInstructionIngredientsToRecipe(
@@ -32,7 +32,7 @@ export class RecipeController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.recipeService.findOne(+id);
+    return this.recipeService.getRecipeById(+id);
   }
 
   /*   @Patch(':id')
@@ -48,12 +48,12 @@ export class RecipeController {
   mapInstructionIngredientsToRecipe(
     instructions: Instruction[],
     recipe: Recipe,
-  ): GetRecipeDTO {
+  ): RecipeDTO {
     if (!Array.isArray(recipe.ingredients)) {
       recipe.ingredients = [];
     }
 
-    const recipeToReturn: GetRecipeDTO = structuredClone(recipe);
+    const recipeToReturn: RecipeDTO = structuredClone(recipe);
 
     for (const instruction of instructions) {
       const ingredients = instruction.ingredients;
@@ -67,10 +67,7 @@ export class RecipeController {
         // Ingredient already existent in recipe?
         if (recipeIngredient === undefined) {
           recipeToReturn.ingredients.push({
-            ingredient: {
-              id: ingredient.ingredient.id,
-              name: ingredient.ingredient.name,
-            },
+            ingredient: ingredient.ingredient.name,
             amount: ingredient.amount,
             amountUnit: ingredient.amountUnit,
           });
