@@ -53,7 +53,10 @@ export class RecipeController {
       recipe.ingredients = [];
     }
 
-    const recipeToReturn: RecipeDTO = structuredClone(recipe);
+    //const recipeToReturn: RecipeDTO = structuredClone(recipe);
+    const recipeToReturn: RecipeDTO = {
+      title: recipe.title,
+    }
 
     for (const instruction of instructions) {
       const ingredients = instruction.ingredients;
@@ -67,9 +70,9 @@ export class RecipeController {
         // Ingredient already existent in recipe?
         if (recipeIngredient === undefined) {
           recipeToReturn.ingredients.push({
-            ingredient: ingredient.ingredient.name,
+            name: ingredient.ingredient.name,
             amount: ingredient.amount,
-            amountUnit: ingredient.amountUnit,
+            unit: ingredient.amountUnit.name,
           });
         } else {
           recipeIngredient.amount += ingredient.amount;
