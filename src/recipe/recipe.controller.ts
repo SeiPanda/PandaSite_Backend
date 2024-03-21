@@ -3,6 +3,7 @@ import { RecipeService } from './recipe.service';
 import { Recipe } from './entities/recipe.entity';
 import { Instruction } from 'src/instruction/entities/instruction.entity';
 import { RecipeDTO } from './entities/recipe.dto';
+import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 
 @Controller('recipe')
 export class RecipeController {
@@ -19,13 +20,9 @@ export class RecipeController {
     //   return this.recipeService.findAllShort();
     // }
     const allRecipes = await this.recipeService.getRecipes();
-    const recipesToReturn = [];
+    const recipesToReturn: RecipeDTO[] = [];
     for (const recipe of allRecipes) {
-      const recipeToReturn = this.mapInstructionIngredientsToRecipe(
-        recipe.instructions,
-        recipe,
-      );
-      recipesToReturn.push(recipeToReturn);
+      recipesToReturn.push(mapRecipeToDTO(recipe));
     }
     return recipesToReturn;
   }
@@ -45,7 +42,7 @@ export class RecipeController {
     return this.recipeService.remove(+id);
   } */
 
-  mapInstructionIngredientsToRecipe(
+  /* mapInstructionIngredientsToRecipe(
     instructions: Instruction[],
     recipe: Recipe,
   ): RecipeDTO {
@@ -54,9 +51,6 @@ export class RecipeController {
     }
 
     //const recipeToReturn: RecipeDTO = structuredClone(recipe);
-    const recipeToReturn: RecipeDTO = {
-      title: recipe.title,
-    }
 
     for (const instruction of instructions) {
       const ingredients = instruction.ingredients;
@@ -81,5 +75,5 @@ export class RecipeController {
     }
 
     return recipeToReturn;
-  }
+  } */
 }
