@@ -1,4 +1,4 @@
 export class TimeUnitDTO {
-    id: string;
-    name: string;
+  id: string;
+  name: string;
 }

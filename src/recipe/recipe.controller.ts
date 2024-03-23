@@ -1,7 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
-import { Recipe } from './entities/recipe.entity';
-import { Instruction } from 'src/instruction/entities/instruction.entity';
 import { RecipeDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 
