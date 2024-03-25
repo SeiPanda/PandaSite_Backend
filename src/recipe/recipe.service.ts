@@ -13,7 +13,7 @@ export class RecipeService {
     private readonly difficultyService: DifficultyService,
   ) {}
 
-  async findAllFull(): Promise<Recipe[]> {
+  async getRecipes(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
         instructions: {
@@ -26,12 +26,12 @@ export class RecipeService {
         categories: true,
         timeUnit: true,
         difficulty: true,
-        ingredients: true,
+        ingredients: false,
       },
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} recipe`;
+  getRecipeById(id: number): Promise<Recipe> {
+    return this.recipeRepository.findOneBy({ id });
   }
 }

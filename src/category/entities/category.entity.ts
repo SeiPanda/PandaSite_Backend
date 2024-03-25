@@ -17,7 +17,7 @@ export class Category {
 
   @OneToMany(() => Recipe, (recipe) => recipe.categories)
   @JoinTable({
-    name: 'Recipe_Category',
+    name: 'recipe_category',
     joinColumn: {
       name: 'category_id',
       referencedColumnName: 'id',
