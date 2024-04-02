@@ -1,6 +1,6 @@
-import { IngredientDTO } from "src/ingredient/entities/ingredient.dto";
-import { RecipeDTO } from "src/recipe/entities/recipe.dto";
-import { Recipe } from "src/recipe/entities/recipe.entity";
+import { IngredientDTO } from 'src/ingredient/entities/ingredient.dto';
+import { RecipeDTO } from 'src/recipe/entities/recipe.dto';
+import { Recipe } from 'src/recipe/entities/recipe.entity';
 
 function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
     return {
@@ -58,8 +58,8 @@ function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
                     }
                 }
             }), */
-        ingredients: getCumulatedIngredientDTOs(recipe),
-    };
+    ingredients: getCumulatedIngredientDTOs(recipe),
+  };
 }
 
 function getCumulatedIngredientDTOs(
@@ -97,7 +97,7 @@ function getCumulatedIngredientDTOs(
       }
     }
 
-    return ingredientsToReturn;
-  }
+  return ingredientsToReturn;
+}
 
 export { mapRecipeToDTO };

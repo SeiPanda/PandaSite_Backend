@@ -1,4 +1,4 @@
 export class DifficultyDTO {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 }

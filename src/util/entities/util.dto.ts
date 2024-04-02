@@ -1,3 +1,3 @@
 export class UtilDTO {
-    name: string;
+  name: string;
 }

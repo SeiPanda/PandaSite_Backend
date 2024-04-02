@@ -1,4 +1,4 @@
-import { AmountUnitDTO } from "src/amount-unit/entities/amountUnit.dto";
+import { AmountUnitDTO } from 'src/amount-unit/entities/amountUnit.dto';
 
 export class IngredientDTO {
   singleName: string;
