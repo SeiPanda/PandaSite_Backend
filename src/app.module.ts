@@ -16,7 +16,6 @@ import { IngredientModule } from './ingredient/ingredient.module';
 import { AmountUnitModule } from './amount-unit/amount-unit.module';
 import { InstructionModule } from './instruction/instruction.module';
 import { InstructionIngredientModule } from './instruction_ingredient/instruction_ingredient.module';
-import { RecipeIngredientModule } from './recipe_ingredient/recipe_ingredient.module';
 
 @Module({
   imports: [
@@ -46,7 +45,6 @@ import { RecipeIngredientModule } from './recipe_ingredient/recipe_ingredient.mo
     AmountUnitModule,
     InstructionModule,
     InstructionIngredientModule,
-    RecipeIngredientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

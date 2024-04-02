@@ -1,7 +1,8 @@
 import { AmountUnitDTO } from "src/amount-unit/entities/amountUnit.dto";
 
 export class IngredientDTO {
-  name: string;
+  singleName: string;
+  pluralName: string;
   amount: number;
   unit: AmountUnitDTO;
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
+import { RecipeThinDTO } from './entities/recipe.dto';
 
 @Injectable()
 export class RecipeService {
@@ -10,25 +11,33 @@ export class RecipeService {
     private recipeRepository: Repository<Recipe>,
   ) {}
 
-  async getRecipes(): Promise<Recipe[]> {
+  getRecipes(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
-        instructions: {
-          ingredients: {
-            ingredient: true,
-            amountUnit: true,
-          },
-          utils: true,
-        },
         categories: true,
         timeUnit: true,
-        difficulty: true,
-        ingredients: false,
+        difficulty: true
       },
     });
   }
 
   getRecipeById(id: number): Promise<Recipe> {
-    return this.recipeRepository.findOneBy({ id });
+    return this.recipeRepository.findOne({
+        where: {
+          id
+        },
+        relations: {
+          instructions: {
+            ingredients: {
+              ingredient: true,
+              amountUnit: true,
+            },
+            utils: true,
+          },
+          categories: true,
+          timeUnit: true,
+          difficulty: true
+        },
+    });
   }
 }

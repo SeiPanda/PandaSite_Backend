@@ -1,7 +1,6 @@
 import { Category } from 'src/category/entities/category.entity';
 import { Difficulty } from 'src/difficulty/entities/difficulty.entity';
 import { Instruction } from 'src/instruction/entities/instruction.entity';
-import { RecipeIngredient } from 'src/recipe_ingredient/entities/recipeIngredient.entity';
 import { TimeUnit } from 'src/time-unit/entities/timeUnit.entity';
 import {
   Entity,
@@ -42,18 +41,21 @@ export class Recipe {
   calories: number;
 
   @Column()
-  carbs: number;
+  description: string;
 
   @Column()
+  carbs: number;
+
+  @Column({nullable: true,})
   fiber: number;
 
   @Column()
   protein: number;
 
-  @Column()
+  @Column({nullable: true,})
   fat: number;
 
-  @Column()
+  @Column({nullable: true,})
   sugar: number;
 
   @Column({
@@ -82,7 +84,4 @@ export class Recipe {
 
   @OneToMany(() => Instruction, (instruction) => instruction.recipe)
   instructions: Instruction[];
-
-  @OneToMany(() => RecipeIngredient, (ingredient) => ingredient.recipe)
-  ingredients: RecipeIngredient[];
 }

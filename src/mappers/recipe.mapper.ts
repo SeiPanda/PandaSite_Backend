@@ -4,11 +4,13 @@ import { Recipe } from "src/recipe/entities/recipe.entity";
 
 function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
     return {
+        id: recipe.id,
         title: recipe.title,
         score: recipe.score,
         time: recipe.time,
         timeUnit: recipe.timeUnit,
-        imagePath: recipe.imagePath,
+        image: recipe.imagePath,
+        description: recipe.description,
         calories: recipe.calories,
         carbs: recipe.carbs,
         fiber: recipe.fiber,
@@ -16,29 +18,30 @@ function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
         fat: recipe.fat,
         sugar: recipe.sugar,
         portionSize: recipe.portionSize,
-        difficulty: recipe.difficulty.name,
+        difficulty: recipe.difficulty?.name,
         categories: recipe.categories?.map((category) => { 
             return {
                 name: category.name 
             } 
         }),
-        instructions: recipe.instructions.map((instruction) => {
+        instructions: recipe.instructions?.map((instruction) => {
             return {
                 step: instruction.step,
                 content: instruction.content,
                 title: instruction.title,
-                utils: instruction.utils.map((util) => {
+                utils: instruction.utils?.map((util) => {
                     return {
                         name: util.name
                     }
                 }),
-                ingredients: instruction.ingredients.map((ingredient) => { 
+                ingredients: instruction.ingredients?.map((ingredient) => { 
                     return { 
-                        name: ingredient.ingredient.name, 
+                        singleName: ingredient.ingredient?.singleName, 
+                        pluralName: ingredient.ingredient?.pluralName, 
                         amount: ingredient.amount, 
                         unit: { 
-                            id: ingredient.amountUnit.id, 
-                            name: ingredient.amountUnit.name 
+                            id: ingredient.amountUnit?.id, 
+                            name: ingredient.amountUnit?.name 
                         }
                     }
                 }),
@@ -62,24 +65,26 @@ function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
 function getCumulatedIngredientDTOs(
     recipe: Recipe,
   ): IngredientDTO[] {
-    if (!Array.isArray(recipe.ingredients)) {
-      recipe.ingredients = [];
-    }
 
     const ingredientsToReturn: IngredientDTO[] = [];
+
+    if (!recipe.instructions) {
+      return ingredientsToReturn;
+    }
 
     for (const instruction of recipe.instructions) {
       const ingredients = instruction.ingredients;
       for (const ingredient of ingredients) {
         const recipeIngredient = ingredientsToReturn.find(
           (recipeIngredient) =>
-            recipeIngredient.name === ingredient.ingredient.name &&
-            recipeIngredient.unit.id === ingredient.amountUnit.id,
+            recipeIngredient.singleName === ingredient.ingredient?.singleName &&
+            recipeIngredient.unit.id === ingredient.amountUnit?.id,
         );
         // Ingredient already existent in recipe?
         if (recipeIngredient === undefined) {
           ingredientsToReturn.push({
-            name: ingredient.ingredient.name,
+            singleName: ingredient.ingredient.singleName,
+            pluralName: ingredient.ingredient.pluralName,
             amount: ingredient.amount,
             unit: {
                 id: ingredient.amountUnit.id,

@@ -1,5 +1,4 @@
 import { InstructionIngredient } from 'src/instruction_ingredient/entities/instructionIngredient.entity';
-import { RecipeIngredient } from 'src/recipe_ingredient/entities/recipeIngredient.entity';
 import {
   Column,
   Entity,
@@ -13,8 +12,11 @@ export class Ingredient {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @Column({ name: 'single_name' })
+  singleName: string;
+
+  @Column({ name: 'plural_name' })
+  pluralName: string;
 
   @OneToMany(
     () => InstructionIngredient,
@@ -22,11 +24,4 @@ export class Ingredient {
   )
   @JoinTable({ name: 'instruction_ingredient' })
   instructionIngredients?: InstructionIngredient[];
-
-  @OneToMany(
-    () => RecipeIngredient,
-    (recipeIngredient) => recipeIngredient.ingredient,
-  )
-  @JoinTable({ name: 'recipe_ingredient' })
-  recipeIngredients?: RecipeIngredient[];
 }
