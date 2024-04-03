@@ -46,16 +46,16 @@ export class Recipe {
   @Column()
   carbs: number;
 
-  @Column({nullable: true,})
+  @Column({ nullable: true })
   fiber: number;
 
   @Column()
   protein: number;
 
-  @Column({nullable: true,})
+  @Column({ nullable: true })
   fat: number;
 
-  @Column({nullable: true,})
+  @Column({ nullable: true })
   sugar: number;
 
   @Column({

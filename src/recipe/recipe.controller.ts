@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
-import { RecipeDTO, RecipeThinDTO } from './entities/recipe.dto';
+import { RecipeThinDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
 

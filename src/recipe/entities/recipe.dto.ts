@@ -25,17 +25,16 @@ export class RecipeDTO {
 }
 
 export class RecipeThinDTO {
-    id:number;
-    title: string;
-    score?: number;
-    portionSize: number;
-    difficulty?: string;
-    description: string;
-    time: number;
-    timeUnit: TimeUnitDTO;
-    image?: string;
-    calories?: number;
-    protein?: number;
-    categories: CategoryDTO[];
-  
+  id: number;
+  title: string;
+  score?: number;
+  portionSize: number;
+  difficulty?: string;
+  description: string;
+  time: number;
+  timeUnit: TimeUnitDTO;
+  image?: string;
+  calories?: number;
+  protein?: number;
+  categories: CategoryDTO[];
 }
