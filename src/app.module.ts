@@ -1,3 +1,4 @@
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -19,18 +20,23 @@ import { InstructionIngredientModule } from './instruction_ingredient/instructio
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     BookModule,
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'panda_website',
-      autoLoadEntities: true,
-      synchronize: true, // To be removed in production - might cause data loss!
-      logging: true,
-      maxQueryExecutionTime: 1000, // Log Queries with more than 1s execution time
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DATABASE_HOST'),
+        port: parseInt(configService.get<string>('DATABASE_PORT')),
+        username: configService.get<string>('DATABASE_USER'),
+        password: configService.get<string>('DATABASE_PASSWORD'),
+        database: configService.get<string>('DATABASE_NAME'),
+        autoLoadEntities: true,
+        synchronize: configService.get<boolean>('DATABASE_SYNC'), // To be removed in production - might cause data loss!
+        logging: true,
+        maxQueryExecutionTime: 1000, // Log Queries with more than 1s execution time
+      }),      
     }),
     PublisherModule,
     AuthorModule,
