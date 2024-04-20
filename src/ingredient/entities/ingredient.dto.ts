@@ -1,5 +1,10 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsObject, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsObject,
+  ValidateNested,
+} from 'class-validator';
 import { AmountUnitDTO } from 'src/amount-unit/entities/amountUnit.dto';
 
 export class IngredientDTO {
@@ -10,6 +15,7 @@ export class IngredientDTO {
   pluralName: string;
 
   @IsNotEmpty()
+  @IsNumber()
   amount: number;
 
   @IsNotEmpty()

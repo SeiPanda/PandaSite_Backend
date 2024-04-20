@@ -3,6 +3,7 @@ import {
   IsArray,
   IsBase64,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsOptional,
   ValidateNested,
@@ -19,9 +20,11 @@ export class CreateRecipeDto {
   description: string;
 
   @IsNotEmpty()
+  @IsNumber()
   score: number;
 
   @IsNotEmpty()
+  @IsNumber()
   time: number;
 
   @IsNotEmpty()
@@ -35,24 +38,31 @@ export class CreateRecipeDto {
   image?: string;
 
   @IsNotEmpty()
+  @IsNumber()
   calories: number;
 
   @IsNotEmpty()
+  @IsNumber()
   carbs: number;
 
   @IsNotEmpty()
+  @IsNumber()
   fiber: number;
 
   @IsNotEmpty()
+  @IsNumber()
   protein: number;
 
   @IsNotEmpty()
+  @IsNumber()
   fat: number;
 
   @IsNotEmpty()
+  @IsNumber()
   sugar: number;
 
   @IsNotEmpty()
+  @IsNumber()
   portionSize: number;
 
   @IsNotEmpty()

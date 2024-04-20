@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   ValidateNested,
 } from 'class-validator';
@@ -10,6 +11,7 @@ import { UtilDTO } from 'src/util/entities/util.dto';
 
 export class InstructionDTO {
   @IsNotEmpty()
+  @IsNumber()
   step: number;
 
   @IsNotEmpty()
