@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
+import { CreateRecipeDto } from './entities/createRecipe.dto';
 
 @Injectable()
 export class RecipeService {
@@ -38,7 +39,10 @@ export class RecipeService {
         difficulty: true,
       },
     });
-
     return recipe;
+  }
+
+  create(recipe: CreateRecipeDto) {
+    throw new Error('Method not implemented.');
   }
 }

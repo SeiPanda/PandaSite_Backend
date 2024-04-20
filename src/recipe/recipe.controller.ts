@@ -1,17 +1,18 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { RecipeThinDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
+import { CreateRecipeDto } from './entities/createRecipe.dto';
 
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
-  /* @Post()
+  @Post()
   create(@Body() createRecipeDto: CreateRecipeDto) {
     return this.recipeService.create(createRecipeDto);
-  } */
+  } 
 
   @Get()
   async findAll(): Promise<RecipeThinDTO[]> {
@@ -39,3 +40,5 @@ export class RecipeController {
     return this.recipeService.remove(+id);
   } */
 }
+
+
