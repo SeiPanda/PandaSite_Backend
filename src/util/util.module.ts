@@ -8,5 +8,6 @@ import { Util } from './entities/util.entity';
   imports: [TypeOrmModule.forFeature([Util])],
   controllers: [UtilController],
   providers: [UtilService],
+  exports: [UtilService],
 })
 export class UtilModule {}

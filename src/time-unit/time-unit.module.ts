@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([TimeUnit])],
   controllers: [TimeUnitController],
   providers: [TimeUnitService],
+  exports: [TimeUnitService],
 })
 export class TimeUnitModule {}

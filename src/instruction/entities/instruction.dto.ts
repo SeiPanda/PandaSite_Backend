@@ -11,6 +11,11 @@ import { UtilDTO } from 'src/util/entities/util.dto';
 
 export class InstructionDTO {
   @IsNotEmpty()
+  @IsOptional()
+  @IsNumber()
+  id?: number;
+
+  @IsNotEmpty()
   @IsNumber()
   step: number;
 
