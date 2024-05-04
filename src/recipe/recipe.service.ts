@@ -178,11 +178,16 @@ export class RecipeService {
       recipe.instructions.push(instruction);
     }
 
+    //recipe.imagePath = await this.saveImage(recipeDto.image);
+
     recipe = await this.recipeRepository.save(recipe);
     return this.getRecipeById(recipe.id);
   }
 
   saveImage(imageBase64: string): Promise<string> {
+    if (!imageBase64) {
+      return Promise.reject();
+    }
     // To be implemented. Returns the path of the saved file.
     return Promise.reject();
   }

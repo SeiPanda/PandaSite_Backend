@@ -36,8 +36,13 @@ import { InstructionIngredientModule } from './instruction_ingredient/instructio
         synchronize: configService.get<boolean>('DATABASE_SYNC'), // To be removed in production - might cause data loss!
         logging: true,
         maxQueryExecutionTime: 1000, // Log Queries with more than 1s execution time
-      }),      
+      }),
     }),
+    /* To be enabled with static image serving
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'assets'),
+      exclude: ['/api/(.*)'],
+    }),*/
     PublisherModule,
     AuthorModule,
     GenreModule,
