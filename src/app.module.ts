@@ -17,6 +17,10 @@ import { IngredientModule } from './ingredient/ingredient.module';
 import { AmountUnitModule } from './amount-unit/amount-unit.module';
 import { InstructionModule } from './instruction/instruction.module';
 import { InstructionIngredientModule } from './instruction_ingredient/instruction_ingredient.module';
+import { ImageController } from './image/image.controller';
+import { ImageService } from './image/image.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -38,11 +42,11 @@ import { InstructionIngredientModule } from './instruction_ingredient/instructio
         maxQueryExecutionTime: 1000, // Log Queries with more than 1s execution time
       }),
     }),
-    /* To be enabled with static image serving
+    /* To be enabled with static image serving */
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets'),
       exclude: ['/api/(.*)'],
-    }),*/
+    }),
     PublisherModule,
     AuthorModule,
     GenreModule,
@@ -57,7 +61,7 @@ import { InstructionIngredientModule } from './instruction_ingredient/instructio
     InstructionModule,
     InstructionIngredientModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, ImageController],
+  providers: [AppService, ImageService],
 })
 export class AppModule {}

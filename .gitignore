@@ -36,6 +36,7 @@ lerna-debug.log*
 
 # Dynamic Storage
 /src/storage/images/*
+/assets/*
 !/src/storage/images/dummy_do_not_delete.jpg
 
 # ENV

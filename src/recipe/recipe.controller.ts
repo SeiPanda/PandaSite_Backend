@@ -1,18 +1,9 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  UploadedFile,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { RecipeThinDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('recipe')
 export class RecipeController {
@@ -37,12 +28,6 @@ export class RecipeController {
   async findOne(@Param('id') id: number) {
     const recipe = await this.recipeService.getRecipeById(+id);
     return mapRecipeToDTO(recipe);
-  }
-
-  @Post(':id/image')
-  @UseInterceptors(FileInterceptor('image'))
-  uploadImage(@UploadedFile() image: Express.Multer.File) {
-    console.log(image);
   }
 
   /*   @Patch(':id')
