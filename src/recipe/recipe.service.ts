@@ -70,6 +70,9 @@ export class RecipeService {
   }
 
   async create(recipeDto: CreateRecipeDto) {
+
+    // TODO: Check if image exists in system. if not, insert NULL and return an error (but save the recipe anyway)
+
     let recipe = this.recipeRepository.create({
       title: recipeDto.title,
       description: recipeDto.description,
@@ -82,6 +85,7 @@ export class RecipeService {
       fat: recipeDto.fat,
       sugar: recipeDto.sugar,
       portionSize: recipeDto.portionSize,
+      imagePath: recipeDto.image,
       categories: [],
       instructions: [],
     });
@@ -181,13 +185,5 @@ export class RecipeService {
 
     recipe = await this.recipeRepository.save(recipe);
     return this.getRecipeById(recipe.id);
-  }
-
-  saveImage(imageBase64: string): Promise<string> {
-    if (!imageBase64) {
-      return Promise.reject();
-    }
-    // To be implemented. Returns the path of the saved file.
-    return Promise.reject();
   }
 }
