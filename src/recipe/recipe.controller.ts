@@ -1,14 +1,16 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { RecipeThinDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   create(@Body() createRecipeDto: CreateRecipeDto) {
     return this.recipeService.create(createRecipeDto);

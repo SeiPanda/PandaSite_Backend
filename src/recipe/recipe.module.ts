@@ -14,6 +14,7 @@ import { UtilModule } from 'src/util/util.module';
 import { IngredientModule } from 'src/ingredient/ingredient.module';
 import { AmountUnitModule } from 'src/amount-unit/amount-unit.module';
 import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
     TypeOrmModule.forFeature([Instruction]),
     TypeOrmModule.forFeature([Util]),
     TypeOrmModule.forFeature([Ingredient]),
+    AuthModule,
   ],
   controllers: [RecipeController],
   providers: [RecipeService],
