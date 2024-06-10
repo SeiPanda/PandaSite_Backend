@@ -4,6 +4,5 @@ export class AmountUnitDTO {
   @IsNotEmpty()
   id: string;
 
-  @IsNotEmpty()
-  name: string;
+  name?: string;
 }

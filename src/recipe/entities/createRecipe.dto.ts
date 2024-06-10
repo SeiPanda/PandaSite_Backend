@@ -33,9 +33,8 @@ export class CreateRecipeDto {
   @Type(() => TimeUnitDTO)
   timeUnit: TimeUnitDTO;
 
-  @IsBase64()
   @IsOptional()
-  image?: string;
+  image?: Express.Multer.File;
 
   @IsNotEmpty()
   @IsNumber()
