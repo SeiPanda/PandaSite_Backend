@@ -1,4 +1,4 @@
-import { loadImage } from 'src/helpers/recipeImage.helper';
+import { getFullImageURL } from 'src/helpers/recipeImage.helper';
 import { RecipeThinDTO } from 'src/recipe/entities/recipe.dto';
 import { Recipe } from 'src/recipe/entities/recipe.entity';
 
@@ -9,7 +9,7 @@ function mapRecipeThinToDTO(recipe: Recipe): RecipeThinDTO {
     score: recipe.score,
     time: recipe.time,
     timeUnit: recipe.timeUnit,
-    image: loadImage(recipe),
+    image: getFullImageURL(recipe),
     description: recipe.description,
     calories: recipe.calories,
     protein: recipe.protein,

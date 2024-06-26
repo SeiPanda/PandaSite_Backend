@@ -34,7 +34,7 @@ export class CreateRecipeDto {
   timeUnit: TimeUnitDTO;
 
   @IsOptional()
-  image?: Express.Multer.File;
+  image?: string;
 
   @IsNotEmpty()
   @IsNumber()
