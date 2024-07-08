@@ -1,8 +1,10 @@
+import { CategoryGroup } from 'src/category-group/entities/category-group.entity';
 import { Recipe } from 'src/recipe/entities/recipe.entity';
 import {
   Column,
   Entity,
   JoinTable,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -28,4 +30,7 @@ export class Category {
     },
   })
   recipes: Recipe[];
+
+  @ManyToOne(() => CategoryGroup, (group) => group.categories, { eager: true})
+  group: CategoryGroup;
 }

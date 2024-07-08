@@ -41,7 +41,9 @@ export class RecipeService {
   getRecipes(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
-        categories: true,
+        categories: {
+          group: true
+        },
         timeUnit: true,
         difficulty: true,
       },

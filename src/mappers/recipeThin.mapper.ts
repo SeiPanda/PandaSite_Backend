@@ -18,6 +18,7 @@ function mapRecipeThinToDTO(recipe: Recipe): RecipeThinDTO {
     categories: recipe.categories?.map((category) => {
       return {
         name: category.name,
+        group: category.group?.id
       };
     }),
   };
