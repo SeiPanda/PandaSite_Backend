@@ -5,6 +5,8 @@ import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
 import { FormDataRequest } from 'nestjs-form-data';
+import { mapRecipeSearchOptionsDTO } from 'src/mappers/searchRecipes.mapper';
+import { SearchOptionsDTO } from './entities/searchOptions.dto';
 
 @Controller('recipe')
 export class RecipeController {
@@ -43,4 +45,15 @@ export class RecipeController {
   remove(@Param('id') id: string) {
     return this.recipeService.remove(+id);
   } */
+
+  @Get('search/:searchText')
+  async findOccurences(@Param('searchText') searchText: string) {
+    console.error(searchText)
+    const filteredRecipes = await this.recipeService.getOccurences(searchText);
+    const titles: SearchOptionsDTO[] = [];
+    for (const recipe of filteredRecipes) {
+      titles.push(mapRecipeSearchOptionsDTO(recipe));
+    }
+    return titles;
+  }
 }

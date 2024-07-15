@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Raw, Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
 import { TimeUnitService } from 'src/time-unit/time-unit.service';
@@ -46,6 +46,16 @@ export class RecipeService {
         },
         timeUnit: true,
         difficulty: true,
+      },
+    });
+  }
+
+  getOccurences(text: string){
+    const lowerCaseText = text.toLowerCase();
+
+    return this.recipeRepository.find({
+      where: {
+        title: ILike(`%${lowerCaseText}%`)
       },
     });
   }
