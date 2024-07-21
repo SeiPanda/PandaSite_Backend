@@ -48,7 +48,6 @@ export class RecipeController {
 
   @Get('search/:searchText')
   async findOccurences(@Param('searchText') searchText: string) {
-    console.error(searchText)
     const filteredRecipes = await this.recipeService.getOccurences(searchText);
     const titles: SearchOptionsDTO[] = [];
     for (const recipe of filteredRecipes) {

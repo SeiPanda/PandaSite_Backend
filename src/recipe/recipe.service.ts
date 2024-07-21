@@ -52,7 +52,6 @@ export class RecipeService {
 
   getOccurences(text: string){
     const lowerCaseText = text.toLowerCase();
-
     return this.recipeRepository.find({
       where: {
         title: ILike(`%${lowerCaseText}%`)
