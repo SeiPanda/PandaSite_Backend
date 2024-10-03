@@ -6,7 +6,7 @@ import { mapTimeUnitToDTO } from 'src/mappers/timeUnit.mapper';
 @Controller('time-unit')
 export class TimeUnitController {
   constructor(private readonly timeUnitService: TimeUnitService) {}
-  
+
   @Get()
   async findAll(): Promise<TimeUnitDTO[]> {
     const allUnits = await this.timeUnitService.getTimeUnits();

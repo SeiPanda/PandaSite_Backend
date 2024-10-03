@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Raw, Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
 import { TimeUnitService } from 'src/time-unit/time-unit.service';
@@ -41,9 +41,20 @@ export class RecipeService {
   getRecipes(): Promise<Recipe[]> {
     return this.recipeRepository.find({
       relations: {
-        categories: true,
+        categories: {
+          group: true,
+        },
         timeUnit: true,
         difficulty: true,
+      },
+    });
+  }
+
+  getOccurences(text: string) {
+    const lowerCaseText = text.toLowerCase();
+    return this.recipeRepository.find({
+      where: {
+        title: ILike(`%${lowerCaseText}%`),
       },
     });
   }
@@ -82,6 +93,7 @@ export class RecipeService {
       fat: recipeDto.fat,
       sugar: recipeDto.sugar,
       portionSize: recipeDto.portionSize,
+      imagePath: recipeDto.image,
       categories: [],
       instructions: [],
     });
@@ -115,7 +127,8 @@ export class RecipeService {
     recipe.timeUnit = timeUnit;
 
     /* Set all categories */
-    for (const categoryDto of recipeDto.categories) {
+    console.log(recipeDto.categories);
+    for (const categoryDto of recipeDto.categories ?? []) {
       const categoryToAdd =
         await this.categoryService.findOrCreate(categoryDto);
       recipe.categories.push(categoryToAdd);
@@ -181,13 +194,5 @@ export class RecipeService {
 
     recipe = await this.recipeRepository.save(recipe);
     return this.getRecipeById(recipe.id);
-  }
-
-  saveImage(imageBase64: string): Promise<string> {
-    if (!imageBase64) {
-      return Promise.reject();
-    }
-    // To be implemented. Returns the path of the saved file.
-    return Promise.reject();
   }
 }

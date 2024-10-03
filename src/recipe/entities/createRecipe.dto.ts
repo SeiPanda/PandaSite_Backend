@@ -33,7 +33,6 @@ export class CreateRecipeDto {
   @Type(() => TimeUnitDTO)
   timeUnit: TimeUnitDTO;
 
-  @IsBase64()
   @IsOptional()
   image?: string;
 

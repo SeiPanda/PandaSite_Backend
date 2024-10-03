@@ -11,6 +11,10 @@ export class CategoryService {
     private categoryRepository: Repository<Category>,
   ) {}
 
+  getCategories(): Promise<Category[]> {
+    return this.categoryRepository.find();
+  }
+
   async findOrCreate(categoryDTO: CategoryDTO): Promise<Category> {
     let category = await this.categoryRepository.findOne({
       where: {

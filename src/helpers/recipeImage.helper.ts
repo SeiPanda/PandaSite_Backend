@@ -1,31 +1,17 @@
 import { Logger } from '@nestjs/common';
 import { readFileSync } from 'fs';
+import { ImageService } from 'src/image/image.service';
 import { Recipe } from 'src/recipe/entities/recipe.entity';
 
-export function loadImage(recipe: Recipe) {
-
-  /* Image path in DB null? */
+export function getFullImageURL(recipe: Recipe) {
+  const imageService = new ImageService();
   if (!recipe.imagePath) {
-    return (
-      'data:image/jpeg;base64,' +
-      loadDummyImage()
-    );
+    return '/presets/dummy_do_not_delete.jpg';
   }
 
-  let fileBase64: string = undefined;
-  try {
-    fileBase64 = readFileSync(`./src/storage/images/${recipe.imagePath}`, 'base64');
-  } catch (error) {
-    Logger.verbose('Recipe image not found, delivering dummy_do_not_delete.jpg');
-    fileBase64 = loadDummyImage();
-  }
-
-  return (
-    'data:image/jpeg;base64,' +
-    fileBase64
-  );
+  return '/images/' + recipe.imagePath;
 }
 
 export function loadDummyImage() {
-  return readFileSync(`./src/storage/images/dummy_do_not_delete.jpg`, 'base64');
+  //return readFileSync(`./src/storage/images/dummy_do_not_delete.jpg`, 'base64');
 }
