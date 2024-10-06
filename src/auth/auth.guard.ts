@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -29,6 +30,7 @@ export class AuthGuard implements CanActivate {
       });
       request['user'] = jwtPayload;
     } catch (error) {
+      Logger.error(error);
       throw new UnauthorizedException('No access to this resource');
     }
     return true;
@@ -36,6 +38,7 @@ export class AuthGuard implements CanActivate {
 
   extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    console.log(type, token);
     return type === 'Bearer' ? token : undefined;
   }
 }

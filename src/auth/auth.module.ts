@@ -20,7 +20,7 @@ import { AuthGuard } from './auth.guard';
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: `${
-            configService.get<number>('JWT_LIFETIME_SECONDS') ?? 60
+            configService.get<number>('JWT_LIFETIME_SECONDS') ?? 8000
           }s`,
         },
       }),
