@@ -26,5 +26,5 @@ export class ImageService {
 
   getDefaultPath(): string {
     return this.defaultPath;
-  }
+  };
 }

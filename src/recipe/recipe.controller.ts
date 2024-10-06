@@ -56,4 +56,14 @@ export class RecipeController {
     }
     return titles;
   }
+
+  @Get('search/:searchText')
+  async findOccurences(@Param('searchText') searchText: string) {
+    const filteredRecipes = await this.recipeService.getOccurences(searchText);
+    const titles: SearchOptionsDTO[] = [];
+    for (const recipe of filteredRecipes) {
+      titles.push(mapRecipeSearchOptionsDTO(recipe));
+    }
+    return titles;
+  }
 }
