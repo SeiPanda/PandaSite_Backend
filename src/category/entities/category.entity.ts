@@ -1,11 +1,9 @@
 import { CategoryGroup } from 'src/category-group/entities/category-group.entity';
-import { CategoryGroup } from 'src/category-group/entities/category-group.entity';
 import { Recipe } from 'src/recipe/entities/recipe.entity';
 import {
   Column,
   Entity,
   JoinTable,
-  ManyToOne,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
