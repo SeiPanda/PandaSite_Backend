@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Raw, Repository } from 'typeorm';
-import { ILike, Raw, Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
 import { TimeUnitService } from 'src/time-unit/time-unit.service';
@@ -96,7 +95,6 @@ export class RecipeService {
       sugar: recipeDto.sugar,
       portionSize: recipeDto.portionSize,
       imagePath: recipeDto.image,
-      imagePath: recipeDto.image,
       categories: [],
       instructions: [],
     });
@@ -130,8 +128,6 @@ export class RecipeService {
     recipe.timeUnit = timeUnit;
 
     /* Set all categories */
-    console.log(recipeDto.categories);
-    for (const categoryDto of recipeDto.categories ?? []) {
     console.log(recipeDto.categories);
     for (const categoryDto of recipeDto.categories ?? []) {
       const categoryToAdd =
