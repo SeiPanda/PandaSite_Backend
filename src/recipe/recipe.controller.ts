@@ -1,20 +1,22 @@
-import { Body, Controller, FileTypeValidator, Get, Param, ParseFilePipe, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { RecipeThinDTO } from './entities/recipe.dto';
 import { mapRecipeToDTO } from 'src/mappers/recipe.mapper';
 import { mapRecipeThinToDTO } from 'src/mappers/recipeThin.mapper';
 import { CreateRecipeDto } from './entities/createRecipe.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { FormDataRequest } from 'nestjs-form-data';
+import { mapRecipeSearchOptionsDTO } from 'src/mappers/searchRecipes.mapper';
+import { SearchOptionsDTO } from './entities/searchOptions.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('recipe')
 export class RecipeController {
   constructor(private readonly recipeService: RecipeService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @FormDataRequest()
-  create(
-    @Body() createRecipeDto: CreateRecipeDto) {
+  create(@Body() createRecipeDto: CreateRecipeDto) {
     console.log(createRecipeDto);
     return this.recipeService.create(createRecipeDto);
   }
@@ -44,4 +46,14 @@ export class RecipeController {
   remove(@Param('id') id: string) {
     return this.recipeService.remove(+id);
   } */
+
+  @Get('search/:searchText')
+  async findOccurences(@Param('searchText') searchText: string) {
+    const filteredRecipes = await this.recipeService.getOccurences(searchText);
+    const titles: SearchOptionsDTO[] = [];
+    for (const recipe of filteredRecipes) {
+      titles.push(mapRecipeSearchOptionsDTO(recipe));
+    }
+    return titles;
+  }
 }

@@ -23,6 +23,7 @@ function mapRecipeToDTO(recipe: Recipe): RecipeDTO {
     categories: recipe.categories?.map((category) => {
       return {
         name: category.name,
+        group: category.group.id,
       };
     }),
     instructions: recipe.instructions?.map((instruction) => {

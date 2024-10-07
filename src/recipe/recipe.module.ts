@@ -15,6 +15,7 @@ import { IngredientModule } from 'src/ingredient/ingredient.module';
 import { AmountUnitModule } from 'src/amount-unit/amount-unit.module';
 import { Ingredient } from 'src/ingredient/entities/ingredient.entity';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
     TypeOrmModule.forFeature([Instruction]),
     TypeOrmModule.forFeature([Util]),
     TypeOrmModule.forFeature([Ingredient]),
-    NestjsFormDataModule
+    NestjsFormDataModule,
+    AuthModule,
   ],
   controllers: [RecipeController],
   providers: [RecipeService],

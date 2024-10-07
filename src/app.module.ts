@@ -21,6 +21,9 @@ import { ImageController } from './image/image.controller';
 import { ImageService } from './image/image.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CategoryGroupModule } from './category-group/category-group.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -60,6 +63,9 @@ import { join } from 'path';
     AmountUnitModule,
     InstructionModule,
     InstructionIngredientModule,
+    CategoryGroupModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController, ImageController],
   providers: [AppService, ImageService],
