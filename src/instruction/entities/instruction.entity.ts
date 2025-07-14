@@ -20,7 +20,7 @@ export class Instruction {
   @Column()
   step: number;
 
-  @Column()
+  @Column('text')
   content: string;
 
   @Column({ length: 50 })
